@@ -1,7 +1,8 @@
 import os
 from time import time_ns
 
-from flask import Flask, request, jsonify
+from flask import Flask, request
+from flask import jsonify, send_from_directory
 
 # text to speech module
 from gtts import gTTS
@@ -21,6 +22,7 @@ def tts_api_endpoint ():
 
     return jsonify(DATA)
 
+# where the actual tts happens
 def tts (text, lang='en', slow=False):
     lang = lang  if lang  else 'en'
     slow = False if slow else True
@@ -34,3 +36,9 @@ def tts (text, lang='en', slow=False):
     DATA = {'filename' : uid}
 
     return DATA
+
+# static fetching of the .mp3 file
+@app.route('/mp3/<path:filename>',methods=['GET'])
+def fetch_tts_mp3 (filename):
+    return send_from_directory('./static/tts/.',filename)
+    
