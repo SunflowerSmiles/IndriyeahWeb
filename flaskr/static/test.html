@@ -1,0 +1,16 @@
+<html>
+	<head></head>
+	<body>
+		<script>
+			fetch ('http://localhost:5000/api/text-to-speech',{
+				method : "post",
+				headers : {'Content-Type': 'application/json'},
+				body : JSON.stringify({
+					src  : "suckle on these nuts you dweeb",
+					slow : true
+				})
+				}).then (response => response.json()).
+				then(data => console.log(data))
+		</script>
+	</body>
+</html>
