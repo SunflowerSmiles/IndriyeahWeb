@@ -17,8 +17,15 @@
 returns a BLOB/file containing the speech mp3 file
 <br>
 ## **POST** /api/speech-to-text
-> you post the speech file as a BLOB, or file (tbd)
+> you post the speech file in the body as a BLOB/Large Binary Object
 <br>
 ### Body
-TBD
+<.ogg blob>
+### Successful Response (200)
+```json
+{
+	"status" : ..., 
+	"src"    : ...,        CONTAINS the text from speech
+}
+```
 

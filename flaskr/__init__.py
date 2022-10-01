@@ -52,23 +52,25 @@ def fetch_tts_mp3 (filename):
 @app.route('/api/speech-to-text',methods=['POST','GET'])
 def stt_api_endpoint ():
     data = request.get_data()
-    uid_fname = f"{time_ns()}.wav"
+    absolute_fname = f"./flaskr/static/wav/{time_ns()}.wav"
     byte_file = io.BytesIO(data)
-    os.lis()
-    AudioSegment.from_file(byte_file).export(f'./static/wav/{uid_fname}')
+    AudioSegment.from_file(byte_file).export(absolute_fname, format="wav")
 
-    stt(f'./static/wav/{uid_fname}')
+    text = stt(absolute_fname)
     
-    return "ok"
+    return f"<h1>{text}</h1>"
 
 def stt (absolute_fname):
+    print(f"\n\n\n\n\nhey\n\n\n\n\n")
     recognizer = speech_recognition.Recognizer()
 
     with speech_recognition.AudioFile(absolute_fname) as source:
+        print("doing shiz")
         audio_data = recognizer.record(source)
-        text = r.recognize_google(audio_data)
+        text = recognizer.recognize_google(audio_data)
 
-        print(text)
+        print("\t\t\t\t\t"+text)
+        return text
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
