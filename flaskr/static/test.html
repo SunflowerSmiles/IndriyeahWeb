@@ -4,6 +4,10 @@
 
 <body>
     <button onclick="test_api_text_to_speech()">test text to speech</button>
+    <form id="audio-input" method="post" enctype="multipart/form-data" action="/api/speech-to-text">
+        <input type="file" name="file" accept=".mp3">
+        <input type="submit" value="submit">
+    </form>
     <script>
         test_api_text_to_speech = () => {
             fetch('http://localhost:5000/api/text-to-speech', {
@@ -62,9 +66,15 @@
         }).catch(console.error);
 
         post_blob = blob => {
-            fetch('http://localhost:5000/api/speech-to-text/',{
+            fetch('http://localhost:5000/api/speech-to-text',{
                 method : 'POST',
-                headers : {'Content-Type' : 'audio/ogg' },
+                headers : {
+				    'Content-Type' : 'audio/ogg',
+				    'Access-Control-Allow-Origin' : '*',
+				    'Access-Control-Allow-Methods' : 'GET, POST',
+				    'Access-Control-Allow-Headers' : 'Content-Type',
+				    'Access-Control-Allow-Credentials' : true
+			    },
                 body : blob
             }).then(response => response.text()).
             then(txt => console.log(txt))
