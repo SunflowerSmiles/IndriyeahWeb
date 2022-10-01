@@ -56,21 +56,24 @@ def stt_api_endpoint ():
     byte_file = io.BytesIO(data)
     AudioSegment.from_file(byte_file).export(absolute_fname, format="wav")
 
-    text = stt(absolute_fname)
+    return stt(absolute_fname)
     
-    return f"<h1>{text}</h1>"
 
 def stt (absolute_fname):
-    print(f"\n\n\n\n\nhey\n\n\n\n\n")
+    text = ""
     recognizer = speech_recognition.Recognizer()
 
     with speech_recognition.AudioFile(absolute_fname) as source:
         print("doing shiz")
         audio_data = recognizer.record(source)
         text = recognizer.recognize_google(audio_data)
+    
+    return format_stt_data(text)
 
-        print("\t\t\t\t\t"+text)
-        return text
-
+def format_stt_data (text):
+    DATA = {
+                "status" : "OK",
+                "src" : text,
+            }
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

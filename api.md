@@ -24,7 +24,7 @@ returns a BLOB/file containing the speech mp3 file
 ### Successful Response (200)
 ```json
 {
-	"status" : ..., 
+	"status" : "OK"
 	"src"    : ...,        CONTAINS the text from speech
 }
 ```
