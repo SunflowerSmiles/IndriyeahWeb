@@ -1,11 +1,14 @@
 import os
+import io
 from time import time_ns
 
 from flask import Flask, request
 from flask import jsonify, send_from_directory
 
-# text to speech module
+# all tts, stt, audio modules
 from gtts import gTTS
+from pydub import AudioSegment
+import speech_recognition
 
 app = Flask(__name__)
 
@@ -42,3 +45,28 @@ def tts (text, lang='en', slow=False):
 def fetch_tts_mp3 (filename):
     return send_from_directory('./static/tts/.',filename)
     
+
+# the endpoint forspeech to text
+@app.route('/api/speech-to-text', methods=['POST'])
+def stt_api_endpoint ():
+    print("hhhhhh")
+    data = request.get_data()
+    print("hey")
+    uid_fname = f"{time_ns()}.wav"
+    byte_file = io.BytesIO(data)
+    AudioSegment.from_file(byte_file).export(f'./static/wav/{uid_fname}')
+
+    stt(f'./static/wav/{uid_fname}')
+    
+    os.remove(f'./static/wav/{uid_fname}')
+
+    return "ok"
+
+def stt (absolute_fname):
+    recognizer = speech_recognition.Recognizer()
+
+    with speech_recognition.AudioFile(absolute_fname) as source:
+        audio_data = recognizer.record(source)
+        text = r.recognize_google(audio_data)
+
+        print(text)
