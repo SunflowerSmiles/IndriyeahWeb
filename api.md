@@ -24,7 +24,7 @@ No Body
 ```json
 {
 	"src" : [
-		...              CONTAINS an array of all the lines written in history
+		"a1", "a2", "a3", "an"             // CONTAINS an array of all the lines written in history
 	]
 }
 ```
@@ -56,7 +56,7 @@ returns a BLOB/file containing the speech mp3 file
 ```json
 {
 	"status" : "OK"
-	"src"    : ...,        CONTAINS the text from speech
+	"src"    : "...,        CONTAINS the text from speech
 }
 ```
 -->
