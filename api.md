@@ -1,5 +1,14 @@
 # API paths
 
+## **POST** /api/register
+> to register a device which has not been registered yet
+<br>
+### Body
+No body
+<br>
+### Successful Response (200)
+returns a secure cookie encoding the user identity
+
 ## **POST** /api/text-to-speech
 > you post a string containg the text to be converted to speech
 <br>

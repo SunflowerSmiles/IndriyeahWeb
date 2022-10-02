@@ -1,0 +1,33 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <input type="text" id="input">
+        <button onclick="push_to_history(document.getElementById('text'))">submit</button>
+        <script>
+            fetch ("http://0.0.0.0:5000/api/register").
+            then  (response => response.text()).
+            then  (text => console.log(text))
+
+            push_to_history = arg => {
+                console.log(listCookies())
+                arg = "hey"
+                fetch (`http://0.0.0.0:5000/api/append_history/${arg}`).
+                then  (response => response.text()).
+                then  (text => console.log(text))
+            }
+        
+            function listCookies() {
+                var theCookies = document.cookie.split(';');
+                var aString = '';
+                for (var i = 1 ; i <= theCookies.length; i++) {
+                    aString += i + ' ' + theCookies[i-1] + "\n";
+                }
+                return aString;
+            }
+
+            listCookies()
+
+        </script>
+    </body>
+</html>
