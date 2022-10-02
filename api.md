@@ -2,7 +2,6 @@
 
 ## **POST** /api/register
 > to register a device which has not been registered yet
-<br>
 ### Body
 No body
 <br>
