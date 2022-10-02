@@ -2,6 +2,7 @@ import os
 import io
 from subprocess import call
 from time import time_ns
+from sh import head
 
 from flask import Flask, request, Response
 from flask import jsonify, send_from_directory
@@ -16,6 +17,55 @@ app = Flask(__name__)
 CORS(app, support_credentials=True)
 app.config['SECRET_KEY'] = 'Pranjal-Is-A-Sexy-Man' 
 
+# endpoint for registering
+@app.route('/api/register', methods=['POST'])
+def register_endpoint ():
+    UID = create_user_data_storage(time_ns())
+
+    resp = Response('REGISTERED')
+    resp.set_cookie("indriyeah",value=str(UID),domain='0.0.0.0')
+
+    return resp
+
+def create_user_data_storage (UID):
+    execute_bash(f'sh ./create_user_data_storage.sh {UID}')
+    print(f"[\033[0;32mok\033[0;0m] created user : {UID}")
+
+    return UID
+
+def execute_bash (command):
+    call (command.split(' '))
+
+@app.route('/api/append_history/<history_item>',methods=['POST'])
+def append_history_endpoint (history_item):
+    UID = request.cookies.get("indriyeah-regd")
+
+    append_to_history(UID,history_item)
+
+    return "APPENDED "+history_item
+
+def append_to_history (UID, history_item):
+    execute_bash(f"sh ./append_to_history.sh {UID} {history_item}")
+
+@app.route('/api/get_history/<start>/<end>')
+def serving_history_endpoint (start,end):
+    UID = request.cookies.get("indriyeah-regd")
+    history = get_history_from_file(UID)
+
+    return jsonify(parse_history_into_dict(history))
+
+def get_history_from_file (UID ,start, end):
+    return head("--lines",end,f'./flaskr/users/{UID}/HISTORY.log')[start:]
+
+def parse_history_into_dict (history):
+    DATA = {
+            "src" = history
+            }
+
+    return DATA
+
+# tts and stt functionality
+"""
 # this is the api endpoint for the tts function
 @app.route('/api/text-to-speech',methods=['POST'])
 def tts_api_endpoint ():
@@ -76,37 +126,7 @@ def format_stt_data (text):
                 "status" : "OK",
                 "src" : text,
             }
-
-
-# endpoint for registering
-@app.route('/api/register', methods=['POST'])
-def register ():
-    UID = create_user_data_storage(time_ns())
-
-    resp = Response('REGISTERED')
-    resp.set_cookie("indriyeah",value=str(UID),domain='0.0.0.0')
-
-    return resp
-
-def create_user_data_storage (UID):
-    execute_bash(f'sh ./create_user_data_storage.sh {UID}')
-    print(f"[\033[0;32mok\033[0;0m] created user : {UID}")
-
-    return UID
-
-def execute_bash (command):
-    call (command.split(' '))
-
-@app.route('/api/append_history/<history_item>',methods=['GET'])
-def append_history (history_item):
-    UID = request.cookies.get("indriyeah-regd")
-
-    append_to_history(UID,history_item)
-
-    return "APPENDED "+history_item
-
-def append_to_history (UID, history_item):
-    execute_bash(f"sh ./append_to_history.sh {UID} {history_item[::-1]}")
+"""
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
