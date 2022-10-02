@@ -79,7 +79,7 @@ def format_stt_data (text):
 
 
 # endpoint for registering
-@app.route('/api/register', methods=['GET'])
+@app.route('/api/register', methods=['POST'])
 def register ():
     UID = create_user_data_storage(time_ns())
 
